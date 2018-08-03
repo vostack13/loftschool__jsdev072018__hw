@@ -105,7 +105,6 @@ function slice(array, from, to) {
 	for (let i = from; i < to; i++) {
 		result.push(array[i]);
 	}
-
 	return result;
 }
 
