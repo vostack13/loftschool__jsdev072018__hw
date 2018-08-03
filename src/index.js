@@ -8,8 +8,8 @@
  */
 function forEach(array, fn) {
   for (let i = 0; i < array.length; i++) {
-		fn (array[i], i, array);
-	}
+    fn(array[i], i, array);
+  }
 }
 
 /*
@@ -22,7 +22,7 @@ function map(array, fn) {
   let resultArray = []
 
   for (let i = 0; i < array.length; i++) {
-    resultArray.push(fn (array[i], i, array));
+    resultArray.push(fn(array[i], i, array));
   }
   return resultArray;
 }
@@ -34,6 +34,21 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
+  var temp;
+
+  if (initial === undefined) {
+    temp = array[0];
+    for (let i = 1; i < array.length; i++) {
+      temp = fn(temp, array[i], i, array);
+    }
+  } else {
+    temp = initial;
+    for (let i = 0; i < array.length; i++) {
+      temp = fn(temp, array[i], i, array);
+    }
+  }
+
+  return temp;
 }
 
 /*
@@ -66,10 +81,10 @@ function createProxy(obj) {
 }
 
 export {
-    forEach,
-    map,
-    reduce,
-    upperProps,
-    slice,
-    createProxy
+  forEach,
+  map,
+  reduce,
+  upperProps,
+  slice,
+  createProxy
 };
