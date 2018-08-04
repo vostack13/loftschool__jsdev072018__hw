@@ -68,7 +68,7 @@ function upperProps(obj) {
             result.push(key.toUpperCase())
         }
     }
-
+    
     return result
 }
 
