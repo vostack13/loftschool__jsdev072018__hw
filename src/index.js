@@ -7,9 +7,9 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
-  for (let i = 0; i < array.length; i++) {
-    fn(array[i], i, array);
-  }
+    for (let i = 0; i < array.length; i++) {
+        fn(array[i], i, array);
+    }
 }
 
 /*
@@ -19,12 +19,13 @@ function forEach(array, fn) {
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn) {
-  let resultArray = []
+    let resultArray = []
 
-  for (let i = 0; i < array.length; i++) {
-    resultArray.push(fn(array[i], i, array));
-  }
-  return resultArray;
+    for (let i = 0; i < array.length; i++) {
+        resultArray.push(fn(array[i], i, array));
+    }
+
+    return resultArray
 }
 
 /*
@@ -34,21 +35,21 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
-  var temp;
+    var temp;
 
-  if (initial === undefined) {
-    temp = array[0];
-    for (let i = 1; i < array.length; i++) {
-      temp = fn(temp, array[i], i, array);
+    if (initial === undefined) {
+        temp = array[0];
+        for (let i = 1; i < array.length; i++) {
+            temp = fn(temp, array[i], i, array);
+        }
+    } else {
+        temp = initial;
+        for (let i = 0; i < array.length; i++) {
+            temp = fn(temp, array[i], i, array);
+        }
     }
-  } else {
-    temp = initial;
-    for (let i = 0; i < array.length; i++) {
-      temp = fn(temp, array[i], i, array);
-    }
-  }
 
-  return temp;
+    return temp
 }
 
 /*
@@ -60,13 +61,15 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
-  let result = [];
+    let result = []
 
-  for (let key in obj) {
-   result.push(key.toUpperCase()); 
-  }
+    for (let key in obj) {
+        if (obj[key]) {
+            result.push(key.toUpperCase())
+        }
+    }
 
-  return result;
+    return result
 }
 
 /*
@@ -76,36 +79,37 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
-	let result = [];
+    let result = [];
 
-	if (from === undefined) {
-		return array;
-	}
+    if (from === undefined) {
+        return array
+    }
 
-	if (from + array.length < 0) {
-		from = 0;
-	}
+    if (from + array.length < 0) {
+        from = 0;
+    }
 
-	if (from < 0) {
-		from = array.length + from;
-	}
+    if (from < 0) {
+        from = array.length + from;
+    }
 
-	if (from > array.length) {
-		from = array.length;
-	}
+    if (from > array.length) {
+        from = array.length;
+    }
 
-	if (to < 0) {
-		to = array.length + to;
-	}
+    if (to < 0) {
+        to = array.length + to;
+    }
 
-	if (to === undefined || to > array.length) {
-		to = array.length;
-	}
+    if (to === undefined || to > array.length) {
+        to = array.length;
+    }
 
-	for (let i = from; i < to; i++) {
-		result.push(array[i]);
-	}
-	return result;
+    for (let i = from; i < to; i++) {
+        result.push(array[i]);
+    }
+
+    return result
 }
 
 /*
@@ -115,13 +119,27 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    obj = new Proxy(obj, {
+        set(target, prop, value) {
+            if (!isNaN(value)) {
+                target[prop] = Math.pow(value, 2);
+            } else {
+                // console.log(`Значение '${value}' свойства '${prop}' не является числом`);
+                target[prop] = value;
+            }
+
+            return true
+        }
+    });
+
+    return obj;
 }
 
 export {
-  forEach,
-  map,
-  reduce,
-  upperProps,
-  slice,
-  createProxy
+    forEach,
+    map,
+    reduce,
+    upperProps,
+    slice,
+    createProxy
 };
