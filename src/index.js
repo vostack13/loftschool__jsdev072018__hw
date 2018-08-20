@@ -12,6 +12,7 @@
  */
 function createDivWithText(text) {
     const elem = document.createElement('div');
+
     elem.textContent = text;
 
     return elem;
@@ -23,7 +24,8 @@ function createDivWithText(text) {
  Функция должна вставлять элемент, переданный в переметре what в начало элемента, переданного в параметре where
 
  Пример:
-   prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
+   prepend(document.querySelector('#one'), document.querySelector('#two')) 
+   // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
     where.insertBefore(what, where.firstChild);
@@ -34,7 +36,8 @@ function prepend(what, where) {
 
  3.1: Функция должна перебрать все дочерние элементы узла, переданного в параметре where
 
- 3.2: Функция должна вернуть массив, состоящий из тех дочерних элементов следующим соседом которых является элемент с тегом P
+ 3.2: Функция должна вернуть массив, состоящий из тех дочерних элементов следующим соседом
+ которых является элемент с тегом P
 
  Пример:
    Представим, что есть разметка:
@@ -46,26 +49,29 @@ function prepend(what, where) {
       <p></p>
    </dody>
 
-   findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
+   findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span 
+   т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-    let result = []; 
+    let result = [];
 
     for (const node of where.children) {
-        if (node !== where.lastChild) {    
+        if (node !== where.lastChild) {
             if (node.nextElementSibling.tagName == 'P') {
-                result.push(node);
-            }   
+                result.push(node)
+            }
         }
-    };
+    }
 
-    return result;
+    return result
 }
 
 /*
  Задание 4:
 
- Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
+ Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла,
+ переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
+
  Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
 
  Необходимо найти и исправить ошибку в коде так, чтобы функция работала так, как описано выше.
@@ -104,16 +110,17 @@ function findError(where) {
 function deleteTextNodes(where) {
     for (const node of where.childNodes) {
         if (node.nodeType === 3) {
-            console.log(node);
             where.removeChild(node);
-        }    
+        }
     }
 }
 
 /*
  Задание 6:
 
- Выполнить предудыщее задание с использование рекурсии - то есть необходимо заходить внутрь каждого дочернего элемента (углубляться в дерево)
+ Выполнить предудыщее задание с использование рекурсии - то есть 
+ необходимо заходить внутрь каждого дочернего элемента 
+ (углубляться в дерево)
 
  Задачу необходимо решить без использования рекурсии, то есть можно не уходить вглубь дерева.
  Так же будьте внимательны при удалении узлов, т.к. можно получить неожиданное поведение при переборе узлов
@@ -159,22 +166,27 @@ function collectDOMStat(root) {
         classes: {},
         texts: 0
     }
-    
+
     function searchInfo(root) {
         for (let i = 0; i < root.childNodes.length; i++) {
             if (root.childNodes[i].nodeType === 3) {
                 obj.texts++
-            } else if (root.childNodes[i].nodeType === 1){
+            } else if (root.childNodes[i].nodeType === 1) {
                 searchInfo(root.childNodes[i]);
-                 
-                if (Object.keys(root.childNodes[i].classList).length !== 0) {
-                    for (let key in Object.keys(root.childNodes[i].classList)) {
-                        (obj.classes[root.childNodes[i].classList[key]] === undefined) ? obj.classes[root.childNodes[i].classList[key]] = 1 : obj.classes[root.childNodes[i].classList[key]]++
+
+                // if (Object.keys(root.childNodes[i].classList).length !== 0) {
+                // for (let key in Object.keys(root.childNodes[i].classList)) {
+                if (root.childNodes[i].classList.length !== 0) {
+                    for (let j=0; j < root.childNodes[i].classList.length; j++) {
+                        (obj.classes[root.childNodes[i].classList[j]] === undefined) 
+                            ? obj.classes[root.childNodes[i].classList[j]] = 1
+                            : obj.classes[root.childNodes[i].classList[j]]++
                     }
                 }
-                (obj.tags[root.childNodes[i].nodeName] === undefined) ? obj.tags[root.childNodes[i].nodeName] = 1 : obj.tags[root.childNodes[i].nodeName]++;
+                (obj.tags[root.childNodes[i].nodeName] === undefined) 
+                    ? obj.tags[root.childNodes[i].nodeName] = 1
+                    : obj.tags[root.childNodes[i].nodeName]++;
             }
-            
         }
 
         return obj
@@ -216,6 +228,33 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+    let obj = {
+        type: '',
+        nodes: []
+    }
+
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === 'childList') {
+                if (mutation.addedNodes.length !== 0) {
+                    obj.type = 'insert'
+                    obj.nodes = Array.from(mutation.addedNodes)
+                    fn(obj)
+                } else {
+                    obj.type = 'remove'
+                    obj.nodes = Array.from(mutation.removedNodes)
+                    fn(obj)
+                }
+            }
+        })
+    })
+
+    observer.observe(where, {
+        attributes: true,
+        childList: true,
+        characterData: true
+    });
+
 }
 
 export {
