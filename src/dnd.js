@@ -27,15 +27,42 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
-    var myDiv = document.createElement('div');
+    let myDiv = document.createElement('div');
+
+    var elemStyle = {
+        color: '000000',
+        width: 0,
+        height: 0,
+        top: 0,
+        left: 0
+    }
+    
+    function setElemStyle() {
+        const clientWidth = document.documentElement.clientWidth
+        const clientHidth = document.documentElement.clientHeight
+        
+        elemStyle.color += Math.floor(Math.random() * 0xFFFFFF).toString(16)
+        elemStyle.color = '#' + elemStyle.color.substr(-6)
+
+        elemStyle.width = Math.floor(Math.random() * (clientWidth))
+        elemStyle.height = Math.floor(Math.random() * (clientHidth))
+        
+        elemStyle.left = Math.floor(Math.random() * (clientWidth - elemStyle.width)) + 'px'
+        elemStyle.top = Math.floor(Math.random() * (clientHidth - elemStyle.height)) + 'px'
+        
+        elemStyle.width += 'px'
+        elemStyle.height += 'px'
+    }
+
+    setElemStyle()
 
     myDiv.className = 'draggable-div'
-    myDiv.style.backgroundColor = 'green'
-    myDiv.style.width = '300px'
-    myDiv.style.height = '100px'
     myDiv.style.position = 'absolute'
-    myDiv.style.top = '10%'
-    myDiv.style.left = '10%'
+    myDiv.style.backgroundColor = elemStyle.color
+    myDiv.style.width = elemStyle.width
+    myDiv.style.height = elemStyle.height
+    myDiv.style.top = elemStyle.top
+    myDiv.style.left = elemStyle.left
 
     return myDiv
 }
