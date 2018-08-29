@@ -30,10 +30,10 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
-    return new Promise (resolve => {
+    return new Promise ((resolve, reject) => {
         const myXhr = new XMLHttpRequest()
 
-        myXhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+        myXhr.open('GET', 'https://raw.githubusercontent.com/vostack13/js__other-tasks/master/js__task-01/jsdev-072018/cities.json')
         myXhr.responseType = 'json'
         myXhr.send()
         myXhr.addEventListener('load', () => {
@@ -48,6 +48,8 @@ function loadAndSortTowns() {
                     
                     return 0
                 }))
+            } else {
+                reject()
             }
         })
     })
