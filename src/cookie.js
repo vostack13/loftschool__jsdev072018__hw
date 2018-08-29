@@ -77,9 +77,9 @@ function filterObjCookies (obj, filterString) {
 // Вывод в таблицу куков
 function updateListTable(obj) {
     const fragmentTableBody = document.createDocumentFragment()
+    const filterObj = filterObjCookies(obj, filterNameInput.value)
 
     listTable.innerHTML = ''
-    const filterObj = filterObjCookies(obj, filterNameInput.value)
     
     for (let cookieName in filterObj) {
         if (filterObj.hasOwnProperty(cookieName)) {
