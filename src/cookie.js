@@ -43,8 +43,6 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-let objCookies = {}
-
 // Создание объекта куков из браузерной глобальной переменной document.cookie
 function getObjCookies() {
     return document.cookie.split('; ').reduce((prev, current) => {
@@ -153,5 +151,3 @@ listTable.addEventListener('click', (e) => {
 })
 
 window.onload = updateListTable(getObjCookies())
-
-
