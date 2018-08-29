@@ -57,11 +57,12 @@ function getObjCookies() {
 }
 
 // Фильтрация объекта с куками (возвращает полученную функцию)
-function filterObjCookies (obj, filterString) {
-    const subString = new RegExp(filterString, 'ig')
+function filterObjCookies (obj = {}, filterString) {
     let resultObj = {}
     
     if (filterString !== '') {
+    const subString = new RegExp(filterString, 'ig')
+    
         for (let cookie in obj) {
             if (subString.test(cookie) || subString.test(obj[cookie]) ) {
                 resultObj[cookie] = obj[cookie]
