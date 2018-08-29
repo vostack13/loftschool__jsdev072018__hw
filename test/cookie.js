@@ -64,7 +64,7 @@ describe('ДЗ 7.2 - Cookie editor', () => {
             addButton.click();
 
             cookies = getCookies();
-            assert(cookies.hasOwnProperty(addNameInput.value), 'cookie не добавлена в барузер');
+            assert(cookies.hasOwnProperty(addNameInput.value), 'cookie не добавлена в браузер');
             assert.equal(cookies[addNameInput.value], addValueInput.value, 'cookie не добавлена в барузер');
             assert.equal(listTable.children.length, 1, 'cookie не добавлена в таблицу');
 

@@ -78,7 +78,7 @@ function filterObjCookies (obj, filterString) {
 function updateListTable(obj) {
     const fragmentTableBody = document.createDocumentFragment()
     const filterObj = filterObjCookies(obj, filterNameInput.value)
-
+    
     listTable.innerHTML = ''
     
     for (let cookieName in filterObj) {
@@ -141,6 +141,8 @@ addButton.addEventListener('click', () => {
 
 // Обработчки события по клику на кнопку "Удалить"
 listTable.addEventListener('click', (e) => {
+    e.preventDefault();
+
     if (e.target.nodeName === 'BUTTON') {
         const cookieName = e.target.parentElement.parentElement.firstChild.innerText
 
