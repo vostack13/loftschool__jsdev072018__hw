@@ -43,10 +43,106 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+let objCookies = {}
+
+// Создание объекта куков из браузерной глобальной переменной document.cookie
+function getObjCookies(filterInput) {
+    objCookies = document.cookie.split('; ').reduce((prev, current) => {
+        let [name, value] = current.split('=')
+
+        prev[name] = value
+
+        return prev
+    }, {})
+    
+    updateListTable(filterObjCookies (objCookies, filterInput.value))
+}
+
+// Фильтрация объекта с куками (возвращает полученную функцию)
+function filterObjCookies (obj, filterString) {
+    const subString = new RegExp(filterString, 'ig')
+    let resultObj = {}
+    
+    if (filterString !== '') {
+        for (let cookie in obj) {
+            if (subString.test(cookie) || subString.test(obj[cookie]) ) {
+                resultObj[cookie] = obj[cookie]
+            }
+        }
+    } else {
+        resultObj = obj
+    }
+
+    return resultObj
+}
+
+// Вывод в таблицу куков
+function updateListTable(obj) {
+    const fragmentTableBody = document.createDocumentFragment()
+
+    listTable.innerHTML = ''
+
+    for (let cookieName in obj) {
+        if (obj.hasOwnProperty(cookieName)) {
+            const tr = document.createElement('tr')
+            const tdName = document.createElement('td')
+            const tdValue = document.createElement('td')
+            const removeButton = document.createElement('button')
+    
+            tdName.innerText = cookieName
+            tdValue.innerText = obj[cookieName]
+            removeButton.innerText = 'Удалить'
+            fragmentTableBody.appendChild(tdName)
+            fragmentTableBody.appendChild(tdValue)
+            fragmentTableBody.appendChild(removeButton)
+            tr.appendChild(fragmentTableBody)
+            listTable.appendChild(tr)
+        }
+    }
+}
+
+// Добавление куков
+function addObjCookies(cookieNameInput, cookieValueInput) {
+    if (cookieNameInput.value && cookieValueInput.value) {
+        document.cookie = `${cookieNameInput.value}=${cookieValueInput.value}`
+
+        // обнуляем значения и внешний вид инпутов
+        cookieNameInput.style.borderColor = '#ccc';
+        cookieValueInput.style.borderColor = '#ccc';
+        cookieNameInput.value = ''
+        cookieValueInput.value = ''
+    } else {    
+        // стилизуем валиидацию инпутов
+        (!cookieNameInput.value)
+            ? cookieNameInput.style.borderColor = 'red'
+            : cookieNameInput.style.borderColor = '#ccc';
+
+        (!cookieValueInput.value)
+            ? cookieValueInput.style.borderColor = 'red'
+            : cookieValueInput.style.borderColor = '#ccc';
+    }
+    
+    getObjCookies(filterNameInput)
+}
+
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    updateListTable(filterObjCookies (objCookies, filterNameInput.value))
 });
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
+    addObjCookies(addNameInput, addValueInput)
 });
+
+// Обработчки события по клику на кнопку "Удалить"
+listTable.addEventListener('click', (e) => {
+    if (e.target.nodeName === 'BUTTON') {
+        const cookieName = e.target.parentElement.firstChild.innerText
+
+        document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        getObjCookies(filterNameInput)
+    }
+})
+
+getObjCookies(filterNameInput)
