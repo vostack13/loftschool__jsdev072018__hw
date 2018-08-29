@@ -46,16 +46,14 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 let objCookies = {}
 
 // Создание объекта куков из браузерной глобальной переменной document.cookie
-function getObjCookies(filterInput) {
-    objCookies = document.cookie.split('; ').reduce((prev, current) => {
+function getObjCookies() {
+    return document.cookie.split('; ').reduce((prev, current) => {
         let [name, value] = current.split('=')
 
         prev[name] = value
 
         return prev
     }, {})
-    
-    updateListTable(filterObjCookies (objCookies, filterInput.value))
 }
 
 // Фильтрация объекта с куками (возвращает полученную функцию)
@@ -81,20 +79,26 @@ function updateListTable(obj) {
     const fragmentTableBody = document.createDocumentFragment()
 
     listTable.innerHTML = ''
-
-    for (let cookieName in obj) {
-        if (obj.hasOwnProperty(cookieName)) {
+    const filterObj = filterObjCookies(obj, filterNameInput.value)
+    
+    for (let cookieName in filterObj) {
+        if (filterObj.hasOwnProperty(cookieName)) {
             const tr = document.createElement('tr')
             const tdName = document.createElement('td')
             const tdValue = document.createElement('td')
+            const tdremove = document.createElement('td')
             const removeButton = document.createElement('button')
     
             tdName.innerText = cookieName
-            tdValue.innerText = obj[cookieName]
-            removeButton.innerText = 'Удалить'
             fragmentTableBody.appendChild(tdName)
+
+            tdValue.innerText = filterObj[cookieName]
             fragmentTableBody.appendChild(tdValue)
-            fragmentTableBody.appendChild(removeButton)
+
+            removeButton.innerText = 'Удалить'
+            tdremove.appendChild(removeButton)
+            fragmentTableBody.appendChild(tdremove)
+            
             tr.appendChild(fragmentTableBody)
             listTable.appendChild(tr)
         }
@@ -122,12 +126,12 @@ function addObjCookies(cookieNameInput, cookieValueInput) {
             : cookieValueInput.style.borderColor = '#ccc';
     }
     
-    getObjCookies(filterNameInput)
+    updateListTable(getObjCookies())
 }
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
-    updateListTable(filterObjCookies (objCookies, filterNameInput.value))
+    updateListTable(getObjCookies())
 });
 
 addButton.addEventListener('click', () => {
@@ -138,11 +142,13 @@ addButton.addEventListener('click', () => {
 // Обработчки события по клику на кнопку "Удалить"
 listTable.addEventListener('click', (e) => {
     if (e.target.nodeName === 'BUTTON') {
-        const cookieName = e.target.parentElement.firstChild.innerText
+        const cookieName = e.target.parentElement.parentElement.firstChild.innerText
 
         document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        getObjCookies(filterNameInput)
+        updateListTable(getObjCookies())
     }
 })
 
-getObjCookies(filterNameInput)
+window.onload = updateListTable(getObjCookies())
+
+
