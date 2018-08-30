@@ -1,11 +1,17 @@
 import './scss/main.scss'
-import test from './test'
+import render from './templates/friends.hbs';
+// import { dnd, otherFunc } from './js/dnd';
 
-test()
+const container = document.querySelector('.container');
 
-let string = ''
-let number = string === 'строка'
+const items = [
+    { name: 'Иван', last_name: 'Иванов' },
+    { name: 'Олег', last_name: 'Петров' },
+    { name: 'Денис', last_name: 'Кузнецов' },
+    { name: 'Игорь', last_name: 'Ширяяев' }
+];
 
-number
-    ? console.log('равно')
-    : console.log('не равно')
+container.innerHTML = render({ items });
+
+// dnd();
+// otherFunc();

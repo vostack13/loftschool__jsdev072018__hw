@@ -1,13 +1,14 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve('dist'),
         filename: 'main.js',
-        publicPath: 'dist/'
+        // publicPath: 'dist/'
     },
     
     devtool: 'inline-source-map',
@@ -15,7 +16,8 @@ module.exports = {
     // Настройки для webpack-dev-server
     devServer: {
         // отображаем ошибки компиляции файлов на лету в окне браузера
-        overlay: true
+        overlay: true,
+        // index: 'dist/index.html'
     },
 
     // указываем правила для модулей
@@ -31,13 +33,6 @@ module.exports = {
                 }
               }
             },
-            // {
-            //     test: /\.css$/,
-            //     use: [
-            //         'style-loader',
-            //         'css-loader'
-            //     ]
-            // },
             {
                 test: /\.scss$/,
                     use: ExtractTextPlugin.extract({
@@ -59,16 +54,22 @@ module.exports = {
                         }
                       ]
                     })
+            },
+            {
+                test: /\.hbs/,
+                loader: 'handlebars-loader'
             }
           ]
     },
 
     plugins: [
-        new ExtractTextPlugin('css/main.css')
-        //if you want to pass in options, you can do so:
-        //new ExtractTextPlugin({
-        //  filename: 'style.css'
-        //})
+        new ExtractTextPlugin('css/main.css'),
+        new HtmlWebpackPlugin({
+            title: 'FriendsFilter',
+            template: 'index.hbs',
+            filename: 'index.html',
+            chunks: ['main']
+        }),
       ]
 }
 
