@@ -1,3 +1,10 @@
-{{#each items}}
-    <div class="name">{{ name }} {{last_name}}</div>
-{{/each}}
+<div class="friend-list">
+    {{#each items}}
+        <div class="friend-item">
+            <div>
+                <img src="{{ photo_100 }}" alt="">
+            </div>
+            <p class="name">{{ first_name }} {{last_name}}</p>
+        </div>
+    {{/each}}
+</div>
