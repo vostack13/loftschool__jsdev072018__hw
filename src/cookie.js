@@ -112,8 +112,8 @@ function addObjCookies(cookieNameInput, cookieValueInput) {
         // обнуляем значения и внешний вид инпутов
         cookieNameInput.style.borderColor = '#ccc';
         cookieValueInput.style.borderColor = '#ccc';
-        cookieNameInput.value = ''
-        cookieValueInput.value = ''
+        // cookieNameInput.value = ''
+        // cookieValueInput.value = ''
     } else {    
         // стилизуем валиидацию инпутов
         (!cookieNameInput.value)
