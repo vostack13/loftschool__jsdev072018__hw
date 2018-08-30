@@ -19,12 +19,17 @@ module.exports = {
     module: {
         rules: [
             {
-                // указваем типы файлов для котороых ниже установим настройки 
-                test: /\.js$/,
+              test: /\.js$/,
+            //   exclude: /(node_modules|bower_components)/,
+              use: {
                 loader: 'babel-loader',
-                // exclude: '/node_modules/' // добавляем исключения
+                options: {
+                  presets: ['@babel/preset-env'],
+                  plugins: [require('@babel/plugin-proposal-object-rest-spread')]
+                }
+              }
             }
-        ]
+          ]
     }
 }
 
