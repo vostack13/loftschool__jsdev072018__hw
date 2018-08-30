@@ -1,4 +1,5 @@
 const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
 
@@ -8,6 +9,8 @@ module.exports = {
         filename: 'main.js',
         publicPath: 'dist/'
     },
+    
+    devtool: 'inline-source-map',
 
     // Настройки для webpack-dev-server
     devServer: {
@@ -20,7 +23,6 @@ module.exports = {
         rules: [
             {
               test: /\.js$/,
-            //   exclude: /(node_modules|bower_components)/,
               use: {
                 loader: 'babel-loader',
                 options: {
@@ -28,8 +30,45 @@ module.exports = {
                   plugins: [require('@babel/plugin-proposal-object-rest-spread')]
                 }
               }
+            },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         'style-loader',
+            //         'css-loader'
+            //     ]
+            // },
+            {
+                test: /\.scss$/,
+                    use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                url: false,
+                                minimize: true,
+                                sourceMap: true
+                            }
+                        }, 
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                      ]
+                    })
             }
           ]
-    }
+    },
+
+    plugins: [
+        new ExtractTextPlugin('css/main.css')
+        //if you want to pass in options, you can do so:
+        //new ExtractTextPlugin({
+        //  filename: 'style.css'
+        //})
+      ]
 }
 
