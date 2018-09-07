@@ -1,11 +1,8 @@
-@import 'components/header';
-@import 'components/body';
-
 .friend-list{
     display: flex;
     flex-wrap: wrap;
 
     .friend-item {
-        width: 25%;
+        width: 20%;
     }
 }
