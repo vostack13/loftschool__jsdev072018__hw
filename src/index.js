@@ -34,6 +34,7 @@ function callAPI(method, params) {
     })
 }
 
+// С помощью .then
 // auth()
 //     .then(() => {
 //         return callAPI('users.get',{ name_case: 'gen'})
@@ -49,6 +50,7 @@ function callAPI(method, params) {
 
 //     })
 
+// С помощью async/await
 (async () => {
     try {
         await auth()
