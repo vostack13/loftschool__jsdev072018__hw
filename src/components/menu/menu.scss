@@ -1,0 +1,25 @@
+.nav-menu__list {
+    padding-top: 40px;
+} 
+
+.nav-menu__item {
+    text-align: center;
+    &-link {
+        color: #3FA1FD;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-size: 14px;
+        
+        &::before {
+            margin: 0 auto 8px auto;
+            content: '';
+            display: block;
+            width: 41px;
+            height: 32px;
+            background: url('../img/friends.svg') center no-repeat;
+            background-size: cover;
+        }
+    }
+
+}

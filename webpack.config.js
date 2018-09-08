@@ -1,12 +1,13 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 
     entry: './src/index.js',
     output: {
-        path: path.resolve('dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: 'main.js',
         // publicPath: 'dist/'
     },
@@ -53,7 +54,20 @@ module.exports = {
             },
             {
                 test: /\.hbs/,
-                loader: 'handlebars-loader'
+                loader: 'handlebars-loader',
+                // query: {
+                //     inlineRequires: '/images/'
+                // }
+
+            },
+            {
+                test: /\.(png|jp(e*)g|svg)$/,  
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: 'img/[name].[ext]',
+                    }
+                }]
             }
           ]
     },
@@ -62,10 +76,13 @@ module.exports = {
         new ExtractTextPlugin('css/main.css'),
         new HtmlWebpackPlugin({
             title: 'FriendsFilter',
-            template: 'index.hbs',
+            template: 'src/index.hbs',
             filename: 'index.html',
             chunks: ['main']
         }),
+        // new CopyWebpackPlugin([
+        //     {from:'src/images',to:'images'} 
+        // ]),
       ]
 }
 

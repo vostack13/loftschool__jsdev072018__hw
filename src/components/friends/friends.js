@@ -1,55 +1,56 @@
 import './friends.scss'
-import render from './friends.hbs';
+import renderContainer from './friends-container.hbs';
+import renderList from './friends-list.hbs';
+import {callAPI} from '../.././index.js'
 
-function friendsInit() {
-    const container = document.querySelector('.container')
-    
-    VK.init({
-        apiId: 6677762
-      });
-    
-    function auth() {
-        return new Promise((resolve, reject) => {
-            VK.Auth.login(data => {
-                if (data.session) {
-                    resolve()
-                } else {
-                    reject(new Error('Не удалось авторизоваться'))
-                }
-            }, 2)
-        })
-    }
-    
-    function callAPI(method, params) {
-        params.v = '5.76'
-    
-        return new Promise((resolve, reject) => {
-            VK.api(method, params, (data) => {
-                if (data.error) {
-                    reject(data.error)
-                } else {
-                    resolve(data.response)
-                }
-            })
-        })
-    }
+
+function renderFriendsComp(container) {
+    container.innerHTML = renderContainer();
     
     (async () => {
         try {
-            await auth()
-            const [me] = await callAPI('users.get',{ name_case: 'gen'})
-            const headerInfo = document.querySelector('#page-title')
-            headerInfo.textContent = `Друзья на странице ${me.first_name} ${me.last_name}`
+            const listFrendsAll = document.querySelector('#friends__list-all')
+            const inputSearchAll = document.querySelector('.frends-search__frends-all')
+            const titleCountAll = document.querySelector('.frends-col__title-count-all')
+            const fragmentListFrends = document.createDocumentFragment()
+            
+            const friends = await callAPI('friends.get', { fields: 'photo_100', order: 'name'})
+            titleCountAll.textContent = friends.items.length
+            listFrendsAll.innerHTML = renderList(friends);
     
-            const friends = await callAPI('friends.get', { fields: 'city, country, photo_100' })
-            container.innerHTML = render(friends);
-    
+            inputSearchAll.addEventListener('keyup', (e) => {
+
+                listFrendsAll.innerHTML = renderList(filterRender(friends, inputSearchAll.value))
+            });
+            
         } catch (e) {
             console.error(e)
         }
     })();
+};
+
+
+function filterRender(obj = {}, filterString) {
+    let resultObj = {
+        items: []
+    }
+
+    if (filterString !== '') {
+        const subString = new RegExp(filterString, 'ig')
+
+        for (let friend of obj.items) {
+            
+            if (subString.test(friend.first_name)) {
+                resultObj.items.push(friend) 
+            }
+        }
+    } else {
+        resultObj = obj
+    }
+    
+    return resultObj
 }
 
 export {
-    friendsInit
+    renderFriendsComp
 }

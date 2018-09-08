@@ -1,75 +1,69 @@
-import './components/app/app.scss'
+import './index.scss'
+// import './components/header/header.scss'
+import {renderMenuComp} from './components/menu/menu.js';
+import {renderHeaderComp} from './components/header/header.js';
+import {renderFriendsComp} from './components/friends/friends.js';
+
 // import render from './components/friends/friends.hbs';
-import {friendsInit} from './components/friends/friends.js';
+// import {friendsInit} from './components/friends/friends.js';
 // import { dnd, otherFunc } from './js/dnd';
 
-// const container = document.querySelector('.container')
 
-// VK.init({
-//     apiId: 6677762
-//   });
+// Контейнеры для компонентов страницы
+const containerNavMenu = document.querySelector('.nav-menu-container')
+const containerHeader = document.querySelector('.header-container')
+const containerMain = document.querySelector('.main-container')
 
-// function auth() {
-//     return new Promise((resolve, reject) => {
-//         VK.Auth.login(data => {
-//             if (data.session) {
-//                 resolve()
-//             } else {
-//                 reject(new Error('Не удалось авторизоваться'))
-//             }
-//         }, 2)
-//     })
-// }
+renderHeaderComp(containerHeader)
+renderMenuComp(containerNavMenu)
+renderFriendsComp(containerMain, false)
 
-// function callAPI(method, params) {
-//     params.v = '5.76'
 
-//     return new Promise((resolve, reject) => {
-//         VK.api(method, params, (data) => {
-//             if (data.error) {
-//                 reject(data.error)
-//             } else {
-//                 resolve(data.response)
-//             }
-//         })
-//     })
-// }
+VK.init({ apiId: 6686757 });
 
-// С помощью .then
-// auth()
-//     .then(() => {
-//         return callAPI('users.get',{ name_case: 'gen'})
-//     })
-//     .then(([me]) => {
-//         const headerInfo = document.querySelector('#page-title')
-//         headerInfo.textContent = `Друзья на странице ${me.first_name} ${me.last_name}`
+function auth() {
+    return new Promise((resolve, reject) => {
+        VK.Auth.getLoginStatus(date => {
+            if (date.status === 'connected') {
+                console.log(date.status)
+                renderHeaderComp(containerHeader, true)
+            } else {
+                VK.Auth.login(data => {
+                    (data.session) ? resolve() : reject(new Error('Не удалось авторизоваться'))
+                }, 2)
+            }
+        })
+    })
+}
 
-//         return callAPI('friends.get', { fields: 'city, country, photo_100' })
-//     })
-//     .then(friends => {
-//         container.innerHTML = render(friends);
+function callAPI(method, params) {
+    params.v = '5.76'
 
-//     })
+    return new Promise((resolve, reject) => {
+        VK.api(method, params, (data) => {
+            if (data.error) {
+                reject(data.error)
+            } else {
+                resolve(data.response)
+            }
+        })
+    })
+}
 
-// С помощью async/await
-// (async () => {
-//     try {
-//         await auth()
-//         const [me] = await callAPI('users.get',{ name_case: 'gen'})
-//         const headerInfo = document.querySelector('#page-title')
-//         headerInfo.textContent = `Друзья на странице ${me.first_name} ${me.last_name}`
-
-//         const friends = await callAPI('friends.get', { fields: 'city, country, photo_100' })
-//         container.innerHTML = render(friends);
-
-//     } catch (e) {
-//         console.error(e)
-//     }
-// })();
-
+(async () => {
+    try {
+        await auth()
+        renderHeaderComp(containerHeader, true)
+    } catch (e) {
+        console.error(e)
+    }
+})();
 
 
 // dnd();
 // otherFunc();
 
-// friendsInit();
+export {
+    auth,
+    callAPI
+}
