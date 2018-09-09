@@ -1,9 +1,10 @@
 {{#each items}}
-    <div class="friends__item">
+    <div id="{{ id }}" class="friends__item" draggable="true">
         <div class="friends__item-img">
-            <img src="{{ photo_100 }}" alt="" class="friends__item-img-pic">
+            <img src="{{ photo_100 }}" alt="" draggable="false" class="friends__item-img-pic">
         </div>
         <p class="friends__item-name">{{ first_name }} {{last_name}}</p>
-        <button class="friends__item-btn">Добавить</button>
+        <button id="button-add"class="friends__item-btn button-add">Добавить</button>
+        <button id="button-del" class="friends__item-btn button-del hide">Удалить</button>
     </div>
 {{/each}}

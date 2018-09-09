@@ -6,8 +6,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #FBFCFC;
-    border-bottom: 1px solid rgba(#CED3E6, .39);
-    
+    border-bottom: 1px solid rgba(#CED3E6, .39);   
 }
 
 .header__logo {
@@ -62,7 +61,7 @@
         font-weight: bold;
     }
 
-    &-bt {
+    &-btn-logout {
         outline: none;
         cursor: pointer;
         border: none;
@@ -75,6 +74,23 @@
             height: 7px;
             background: url('../img/arrow.svg') center no-repeat;
             background-size: cover;
+        }
+    }
+
+    &-btn-login {
+        padding: 14px 32px;
+        background-color: #4591FA;
+        outline: none;
+        cursor: pointer;
+        border: none;
+        font-size: 12px;
+        font-weight: bold;
+        color: #FFFFFF;
+        border-radius: 3px;
+        transition: .4s;
+    
+        &:hover {
+            background-color: rgb(27, 103, 211);
         }
     }
 
